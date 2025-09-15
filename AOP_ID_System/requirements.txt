@@ -1,0 +1,4 @@
+Flask
+pillow
+python-barcode
+qrcode[pil]

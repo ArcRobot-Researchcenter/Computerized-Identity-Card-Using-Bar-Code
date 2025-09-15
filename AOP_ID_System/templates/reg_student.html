@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-9">
+    <div class="card p-4">
+      <h4 class="mb-3">Student Registration</h4>
+      <form method="post" enctype="multipart/form-data">
+        <div class="row">
+          <div class="col-md-6 mb-3"><label class="form-label">Full Name</label><input class="form-control" name="full_name" required></div>
+          <div class="col-md-3 mb-3"><label class="form-label">Sex</label><select class="form-select" name="sex"><option>Male</option><option>Female</option></select></div>
+          <div class="col-md-3 mb-3"><label class="form-label">Date of Birth</label><input class="form-control" name="dob" type="date"></div>
+          <div class="col-md-3 mb-3"><label class="form-label">Blood Group</label><input class="form-control" name="blood_group" placeholder="e.g., O+"></div>
+          <div class="col-md-3 mb-3"><label class="form-label">Course</label><input class="form-control" name="course"></div>
+          <div class="col-md-3 mb-3"><label class="form-label">Reg No.</label><input class="form-control" name="reg_no" required></div>
+          <div class="col-md-3 mb-3"><label class="form-label">Level</label><input class="form-control" name="level" placeholder="e.g., ND I, HND II"></div>
+          <div class="col-md-6 mb-3"><label class="form-label">Email</label><input class="form-control" name="email" type="email" required></div>
+          <div class="col-md-6 mb-3"><label class="form-label">Password</label><input class="form-control" name="password" type="password" required></div>
+        </div>
+        <hr/>
+        <h6>Signature</h6>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Draw your signature</label>
+            <canvas id="sigpad" width="500" height="140" style="border:1px solid #ccc;background:#fff"></canvas>
+            <input type="hidden" id="sig_data" name="signature_data"/>
+            <div class="mt-2 d-flex gap-2">
+              <button type="button" class="btn btn-sm btn-outline-primary" onclick="saveSig()">Use This</button>
+              <button type="button" class="btn btn-sm btn-light" onclick="clearSig()">Clear</button>
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Or upload signature (PNG/JPG)</label>
+            <input class="form-control" type="file" name="signature_file" accept="image/*">
+          </div>
+        </div>
+        <hr/>
+        <h6>Passport Photo</h6>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Snap with camera</label>
+            <video id="cam" autoplay playsinline style="width:100%;max-width:420px;border:1px solid #ddd"></video>
+            <div class="mt-2"><button type="button" class="btn btn-sm btn-outline-secondary" onclick="startCam()">Start Camera</button></div>
+            <canvas id="snap" class="d-none"></canvas>
+            <input type="hidden" id="shot_data" name="shot_data"/>
+            <div class="mt-2"><button type="button" class="btn btn-sm btn-outline-primary" onclick="snapShot()">Capture Snapshot</button></div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Or upload passport (PNG/JPG)</label>
+            <input class="form-control" type="file" name="passport_file" accept="image/*">
+          </div>
+        </div>
+        <button class="btn btn-primary" type="submit">Create Account</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ---- Webcam functions ---- */
+let video = document.getElementById("cam");
+let snap = document.getElementById("snap");
+let shot_data = document.getElementById("shot_data");
+
+function startCam() {
+  navigator.mediaDevices.getUserMedia({ video: true })
+    .then(stream => { video.srcObject = stream; })
+    .catch(err => { alert("Camera error: " + err); });
+}
+
+function snapShot() {
+  let ctx = snap.getContext("2d");
+  snap.width = video.videoWidth;
+  snap.height = video.videoHeight;
+  ctx.drawImage(video, 0, 0, snap.width, snap.height);
+  shot_data.value = snap.toDataURL("image/png");
+  alert("Snapshot captured!");
+}
+
+/* ---- Signature Pad ---- */
+let sigCanvas = document.getElementById("sigpad");
+let sigCtx = sigCanvas.getContext("2d");
+let drawing = false, lastX=0, lastY=0;
+
+sigCanvas.addEventListener("mousedown", e => {
+  drawing = true;
+  lastX = e.offsetX; lastY = e.offsetY;
+});
+sigCanvas.addEventListener("mousemove", e => {
+  if (!drawing) return;
+  sigCtx.strokeStyle = "#000";
+  sigCtx.lineWidth = 2;
+  sigCtx.lineCap = "round";
+  sigCtx.beginPath();
+  sigCtx.moveTo(lastX, lastY);
+  sigCtx.lineTo(e.offsetX, e.offsetY);
+  sigCtx.stroke();
+  lastX = e.offsetX; lastY = e.offsetY;
+});
+window.addEventListener("mouseup", () => drawing=false);
+
+function saveSig() {
+  document.getElementById("sig_data").value = sigCanvas.toDataURL("image/png");
+  alert("Signature attached!");
+}
+function clearSig() {
+  sigCtx.clearRect(0, 0, sigCanvas.width, sigCanvas.height);
+  document.getElementById("sig_data").value = "";
+}
+</script>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row g-3">
+  <div class="col-md-8">
+    <div class="card p-4">
+      <div class="d-flex align-items-center gap-3">
+        <img src="{{ url_for('school_logo') }}" alt="logo" style="width:90px;height:90px"/>
+        <div>
+          <h3 class="brand mb-1">{{ school_name }}</h3>
+          <div class="sub">{{ school_address }}</div>
+          <div class="fw-bold mt-1">COMPUTERIZED IDENTITY CARD USING BAR CODE</div>
+        </div>
+      </div>
+      <hr/>
+      <div class="d-flex flex-wrap gap-2">
+        <a class="btn btn-primary navbtn" href="{{ url_for('login_student') }}">Student Login</a>
+        <a class="btn btn-outline-primary navbtn" href="{{ url_for('register_student') }}">Student Register</a>
+        <a class="btn btn-success navbtn" href="{{ url_for('login_admin') }}">Admin Login</a>
+        {% if no_admin %}
+          <a class="btn btn-outline-success navbtn" href="{{ url_for('register_admin') }}">Create First Admin</a>
+        {% endif %}
+        <a class="btn btn-secondary navbtn" href="{{ url_for('developer') }}">Developer</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card p-4">
+      <h5 class="mb-3">Quick Info</h5>
+      <ul class="mb-0">
+        <li>Students print ID only after admin approval of fees receipt.</li>
+        <li>Passport & receipt can be snapped with your camera.</li>
+        <li>Signature can be drawn or uploaded.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}

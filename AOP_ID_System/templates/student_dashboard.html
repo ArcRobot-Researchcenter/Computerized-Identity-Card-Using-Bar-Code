@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row g-3">
+  <div class="col-lg-8">
+    <div class="card p-4">
+      <div class="d-flex justify-content-between align-items-center">
+        <h4 class="mb-0">Student Dashboard</h4>
+        <span class="badge {% if me['is_approved'] %}bg-success{% else %}bg-warning text-dark{% endif %}">{% if me['is_approved'] %}Approved{% else %}Pending Approval{% endif %}</span>
+      </div>
+      <hr/>
+      <div class="row">
+        <div class="col-md-5 text-center">
+          <img src="{{ url_for('student_passport', user_id=me['id']) }}" alt="passport" style="width:220px;height:auto;border:1px solid #ddd" onerror="this.src='https://via.placeholder.com/220x280?text=Passport'">
+          <div class="mt-2">
+            <a class="btn btn-sm btn-outline-secondary" href="{{ url_for('student_edit') }}">&nbsp;Edit Info&nbsp;</a>
+          </div>
+        </div>
+        <div class="col-md-7">
+          <table class="table table-sm">
+            <tr><th>Full Name</th><td>{{ me['full_name'] }}</td></tr>
+            <tr><th>Reg No</th><td>{{ me['reg_no'] }}</td></tr>
+            <tr><th>Course</th><td>{{ me['course'] }}</td></tr>
+            <tr><th>Level</th><td>{{ me['level'] }}</td></tr>
+            <tr><th>Sex</th><td>{{ me['sex'] }}</td></tr>
+            <tr><th>DOB</th><td>{{ me['dob'] }}</td></tr>
+            <tr><th>Blood Group</th><td>{{ me['blood_group'] }}</td></tr>
+            <tr><th>Email</th><td>{{ me['email'] }}</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card p-4 mt-3">
+      <h5>Tuition Receipt Upload</h5>
+      <p class="text-muted">Upload a clear photo of your school fees receipt. You can snap with your camera or upload an image. An admin must approve before ID printing is enabled.</p>
+      <form method="post" action="{{ url_for('student_upload_receipt') }}" enctype="multipart/form-data">
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Snap with camera</label>
+            <video id="cam" autoplay playsinline style="width:100%;max-width:420px;border:1px solid #ddd"></video>
+            <div class="mt-2"><button type="button" class="btn btn-sm btn-outline-secondary" onclick="startCam()">Start Camera</button></div>
+            <canvas id="snap" class="d-none"></canvas>
+            <input type="hidden" id="shot_data" name="shot_data"/>
+            <div class="mt-2"><button type="button" class="btn btn-sm btn-outline-primary" onclick="snapShot()">Capture Snapshot</button></div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Or upload receipt (PNG/JPG)</label>
+            <input class="form-control" type="file" name="receipt_file" accept="image/*">
+          </div>
+        </div>
+        <button class="btn btn-primary" type="submit">Upload Receipt</button>
+      </form>
+    </div>
+
+    <div class="card p-4 mt-3">
+      <h5>ID Card</h5>
+      <p class="text-muted">Preview your student ID card. Printing is enabled only after admin approval.</p>
+      <div class="d-flex align-items-center gap-3">
+        <img src="{{ url_for('student_card_png') }}" style="width:360px;border:1px solid #ddd"/>
+        <div>
+          <div class="mb-2">Print count: <b>{{ me['id_print_count'] }}</b></div>
+          {% if me['is_approved'] %}
+            <a class="btn btn-success" href="{{ url_for('student_card_pdf') }}">Download ID (PDF)</a>
+          {% else %}
+            <button class="btn btn-secondary" disabled>Waiting for Admin Approval</button>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-4">
+    <div class="card p-4">
+      <h5>Quick Actions</h5>
+      <div class="d-grid gap-2">
+        <a class="btn btn-outline-secondary" href="{{ url_for('student_edit') }}">Edit Profile</a>
+        <a class="btn btn-outline-secondary" href="{{ url_for('student_uploads') }}">Upload Passport / Signature</a>
+        {% if me['receipt_path'] %}
+          <a class="btn btn-outline-secondary" target="_blank" href="{{ url_for('student_receipt', user_id=me['id']) }}">View Uploaded Receipt</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row g-3">
+  <div class="col-lg-4">
+    <div class="card p-4">
+      <h5>Stats</h5>
+      <ul class="mb-0">
+        <li>Total Students: <b>{{ stats['total'] }}</b></li>
+        <li>Approved: <b>{{ stats['approved'] }}</b></li>
+        <li>Pending: <b>{{ stats['pending'] }}</b></li>
+        <li>Total Prints: <b>{{ stats['prints'] }}</b></li>
+      </ul>
+    </div>
+    <div class="card p-4 mt-3">
+      <h5>Add</h5>
+      <div class="d-grid gap-2">
+        <a class="btn btn-outline-primary" href="{{ url_for('register_student_admin') }}">Add Student</a>
+        <a class="btn btn-outline-success" href="{{ url_for('register_admin') }}">Add Admin</a>
+        <a class="btn btn-outline-secondary" href="{{ url_for('export_students_csv') }}">Export Students (CSV)</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-8">
+    <div class="card p-4">
+      <div class="d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Students</h5>
+        <form class="d-flex" method="get">
+          <input class="form-control form-control-sm" name="q" placeholder="Search name or reg no" value="{{ q or '' }}">
+          <button class="btn btn-sm btn-primary ms-2">Search</button>
+        </form>
+      </div>
+      <hr/>
+      <div class="table-responsive">
+        <table class="table table-sm align-middle">
+          <thead><tr><th>#</th><th>Name</th><th>Reg No</th><th>Course</th><th>Level</th><th>Receipt</th><th>Status</th><th>Prints</th><th>Actions</th></tr></thead>
+          <tbody>
+            {% for s in students %}
+              <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ s['full_name'] }}</td>
+                <td>{{ s['reg_no'] }}</td>
+                <td>{{ s['course'] }}</td>
+                <td>{{ s['level'] }}</td>
+                <td>{% if s['receipt_path'] %}<a target="_blank" href="{{ url_for('student_receipt', user_id=s['id']) }}">View</a>{% else %}-{% endif %}</td>
+                <td>{% if s['is_approved'] %}<span class="badge bg-success">Approved</span>{% else %}<span class="badge bg-warning text-dark">Pending</span>{% endif %}</td>
+                <td>{{ s['id_print_count'] }}</td>
+                <td>
+                  {% if not s['is_approved'] %}
+                    <a class="btn btn-sm btn-success" href="{{ url_for('admin_set_approval', user_id=s['id'], val=1) }}">Approve</a>
+                  {% else %}
+                    <a class="btn btn-sm btn-secondary" href="{{ url_for('admin_set_approval', user_id=s['id'], val=0) }}">Lock</a>
+                  {% endif %}
+                  <a class="btn btn-sm btn-outline-primary" target="_blank" href="{{ url_for('admin_student_card_pdf', user_id=s['id']) }}">Print ID</a>
+                  <a class="btn btn-sm btn-outline-danger" href="{{ url_for('admin_delete_user', user_id=s['id']) }}" onclick="return confirm('Delete this student?')">Delete</a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

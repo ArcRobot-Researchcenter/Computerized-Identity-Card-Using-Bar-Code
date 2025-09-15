@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <div class="card p-4">
+      <h4 class="mb-3">Upload Passport / Signature</h4>
+      <form method="post" enctype="multipart/form-data">
+        <div class="mb-3"><label class="form-label">Passport (upload)</label><input class="form-control" type="file" name="passport_file" accept="image/*"></div>
+        <div class="mb-3"><label class="form-label">Or capture via camera</label>
+          <video id="cam" autoplay playsinline style="width:100%;max-width:420px;border:1px solid #ddd"></video>
+          <div class="mt-2"><button type="button" class="btn btn-sm btn-outline-secondary" onclick="startCam()">Start Camera</button></div>
+          <canvas id="snap" class="d-none"></canvas>
+          <input type="hidden" id="shot_data" name="shot_data"/>
+          <div class="mt-2"><button type="button" class="btn btn-sm btn-outline-primary" onclick="snapShot()">Capture Snapshot</button></div>
+        </div>
+        <hr/>
+        <div class="mb-3"><label class="form-label">Signature (upload)</label><input class="form-control" type="file" name="signature_file" accept="image/*"></div>
+        <div class="mb-3"><label class="form-label">Or draw signature</label>
+          <canvas id="sigpad" width="500" height="140" style="border:1px solid #ccc;background:#fff"></canvas>
+          <input type="hidden" id="sig_data" name="signature_data"/>
+          <div class="mt-2 d-flex gap-2">
+            <button type="button" class="btn btn-sm btn-outline-primary" onclick="saveSig()">Use This</button>
+            <button type="button" class="btn btn-sm btn-light" onclick="clearSig()">Clear</button>
+          </div>
+        </div>
+        <button class="btn btn-primary" type="submit">Upload</button>
+      </form>
+    </div>
+  </div>
+</div>
+<script>initSig();</script>
+{% endblock %}

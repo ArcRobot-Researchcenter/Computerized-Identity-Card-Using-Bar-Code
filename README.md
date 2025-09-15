@@ -1,6 +1,20 @@
 # Computerized-Identity-Card-Using-Bar-Code
 A simple Flask web app for managing student ID cards. Students register, capture/upload their passport and signature, upload a fees receipt for approval, and once approved download a PDF ID card with a Code 128 barcode that encodes student details.
 
+## Screenshot 
+
+<h2>📸 Screenshot</h2>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/ArcRobot-Researchcenter/Computerized-Identity-Card-Using-Bar-Code/242d157db6e194f5b3fa205bb2d9890c8511e6e9/screenshot/student-Idcard-barcode-system.jpg"
+       alt="Student ID Card System – Dashboard & Barcode" width="800">
+</p>
+
+<h2>📸 Screenshot</h2>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/ArcRobot-Researchcenter/Computerized-Identity-Card-Using-Bar-Code/242d157db6e194f5b3fa205bb2d9890c8511e6e9/screenshot/studnetbarcode%20id%20card%20system.jpg"
+       alt="Student Barcode ID Card System" width="800">
+</p>
+
 # ✨ Features
 
 Student & Admin portals

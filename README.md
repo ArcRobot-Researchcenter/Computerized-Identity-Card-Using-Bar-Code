@@ -15,6 +15,13 @@ A simple Flask web app for managing student ID cards. Students register, capture
        alt="Student Barcode ID Card System" width="800">
 </p>
 
+<h2>🎥 Demo Video</h2>
+<p align="center">
+  <a href="https://youtu.be/g9vIQco99FM">
+    <img src="https://img.youtube.com/vi/g9vIQco99FM/maxresdefault.jpg" alt="AOP ID Card System — Demo" width="800">
+  </a>
+</p>
+
 # ✨ Features
 
 Student & Admin portals

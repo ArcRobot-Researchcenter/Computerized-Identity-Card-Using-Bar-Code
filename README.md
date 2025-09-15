@@ -86,6 +86,13 @@ Print ID on behalf, Export CSV, Delete accounts
 
 Add Student / Admin from links in sidebar
 
+
+# Now you can log in with SuperAdmin:
+
+Email: admin@example.com
+
+Password: admin123
+
 # 🧾 Barcode Details
 
 Symbology: Code 128 (horizontal, generous quiet zone)
